@@ -1,34 +1,30 @@
-import os
-set_api_key(os.environ.get("ELEVENLABS_API_KEY"))
+import requests
+from http.server import BaseHTTPRequestHandler
+from io import BytesIO
+import json
 
-from flask import Flask, request, jsonify, make_response
-from elevenlabs import set_api_key, generate
+class handler(BaseHTTPRequestHandler):
 
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        body = self.rfile.read(content_length)
+        data = json.loads(body)
 
-app = Flask(__name__)
-
-@app.route('/api/tts', methods=['POST'])
-def tts_endpoint():
-    try:
-        data = request.get_json()
         text = data.get("text")
-
-        # Generate audio with ElevenLabs
-        audio = generate(
-            text=text,
-            voice="Bella",
-            model="eleven_multilingual_v2"
-        )
-
-        response = make_response(jsonify({"audio": audio}))
-        # Add these headers to your response
-        response.headers['Access-Control-Allow-Origin'] = 'https://lord-nine.vercel.app'
-        response.headers['Access-Control-Allow-Methods'] = 'POST'
         
-        return response
+        # Make the HTTP request to ElevenLabs API
+        response = your_function_to_make_http_request(text)
+        audio_url = response.get('audio')  # Adapt based on the response structure
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        response = BytesIO()
+        response.write(json.dumps({"audio": audio_url}).encode())
+        self.wfile.write(response.getvalue())
 
-if __name__ == '__main__':
-    app.run()
+def your_function_to_make_http_request(text):
+    # This is where you'll place your existing HTTP request code to ElevenLabs
+    # Use the 'text' variable to send as part of the request payload
+    # Return the response from ElevenLabs
+    pass

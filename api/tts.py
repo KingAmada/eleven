@@ -6,7 +6,6 @@ from flask_cors import CORS  # <- New import
 from elevenlabs import generate
 
 app = Flask(__name__)
-CORS(app)  # <- New line to handle CORS
 CORS(app, resources={r"/*": {"origins": "https://lord-nine.vercel.app"}})
 
 @app.route('/api/tts', methods=['POST'])

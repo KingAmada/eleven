@@ -4,10 +4,10 @@ set_api_key(os.environ.get("ELEVENLABS_API_KEY"))
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # <- New import
 from elevenlabs import generate
-CORS(app, resources={r"/*": {"origins": "https://lord-nine.vercel.app"}})
 
 app = Flask(__name__)
 CORS(app)  # <- New line to handle CORS
+CORS(app, resources={r"/*": {"origins": "https://lord-nine.vercel.app"}})
 
 @app.route('/api/tts', methods=['POST'])
 def tts_endpoint():

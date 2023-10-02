@@ -2,7 +2,8 @@ import os
 set_api_key(os.environ.get("ELEVENLABS_API_KEY"))
 
 from flask import Flask, request, jsonify, make_response
-from elevenlabs import generate
+from elevenlabs import set_api_key, generate
+
 
 app = Flask(__name__)
 

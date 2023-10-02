@@ -1,3 +1,6 @@
+import os
+set_api_key(os.environ.get("ELEVENLABS_API_KEY"))
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # <- New import
 from elevenlabs import generate

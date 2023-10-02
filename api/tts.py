@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # <- New import
 from elevenlabs import generate
 
 app = Flask(__name__)
+CORS(app)  # <- New line to handle CORS
 
 @app.route('/api/tts', methods=['POST'])
 def tts_endpoint():

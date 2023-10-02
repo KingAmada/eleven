@@ -1,12 +1,10 @@
 import os
 set_api_key(os.environ.get("ELEVENLABS_API_KEY"))
 
-from flask import Flask, request, jsonify
-from flask_cors import CORS  # <- New import
+from flask import Flask, request, jsonify, make_response
 from elevenlabs import generate
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://lord-nine.vercel.app"}})
 
 @app.route('/api/tts', methods=['POST'])
 def tts_endpoint():
@@ -17,13 +15,16 @@ def tts_endpoint():
         # Generate audio with ElevenLabs
         audio = generate(
             text=text,
-            voice="Bella",  # Or any other voice you prefer
-            model="eleven_multilingual_v2"  # Or the specific model you'd like
+            voice="Bella",
+            model="eleven_multilingual_v2"
         )
 
-        # You might need to process the 'audio' variable if it doesn't directly provide a URL.
-        # For this example, I'm assuming it's a URL.
-        return jsonify({"audio": audio})
+        response = make_response(jsonify({"audio": audio}))
+        # Add these headers to your response
+        response.headers['Access-Control-Allow-Origin'] = 'https://lord-nine.vercel.app'
+        response.headers['Access-Control-Allow-Methods'] = 'POST'
+        
+        return response
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
